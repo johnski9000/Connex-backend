@@ -20,7 +20,7 @@ app.use(promMid({
      * To access /metrics you could do:
      * curl -X GET user:password@localhost:9091/metrics
      */
-    // authenticate: req => req.headers.authorization === 'Basic dXNlcjpwYXNzd29yZA==',
+    authenticate: req => req.headers.authorization === "mysecrettoken",
     /**
      * Uncommenting the `extraMasks` config will use the list of regexes to
      * reformat URL path names and replace the values found with a placeholder value
@@ -42,11 +42,20 @@ app.use(promMid({
   }));
 
 // Routes
+// app.get('/time', (req, res) => {
+//   const serverTime = Math.floor(Date.now() / 1000);
+//   res.json({ serverTime });
+// });
 app.get('/time', (req, res) => {
-  const serverTime = Math.floor(Date.now() / 1000);
-  res.json({ serverTime });
-});
-
+    const serverTime = Math.floor(Date.now() / 1000);
+      const authHeader = req.headers.authorization;
+    console.log(authHeader)
+    if (authHeader !== 'mysecrettoken') {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    res.json({ serverTime });
+  });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
