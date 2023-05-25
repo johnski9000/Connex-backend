@@ -4,7 +4,6 @@ const cors = require('cors');
 const app = express();
 const PORT = 8000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(promMid({
@@ -41,11 +40,6 @@ app.use(promMid({
     // },
   }));
 
-// Routes
-// app.get('/time', (req, res) => {
-//   const serverTime = Math.floor(Date.now() / 1000);
-//   res.json({ serverTime });
-// });
 app.get('/time', (req, res) => {
     const serverTime = Math.floor(Date.now() / 1000);
       const authHeader = req.headers.authorization;
